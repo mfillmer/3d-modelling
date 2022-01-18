@@ -1,11 +1,11 @@
-# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+
 tasks:
   - name: start virtual x-server
     command: |
       sh virtualfb.sh
       echo export DISPLAY=$(cat virtualfb.DISPLAY) >> ~/.bashrc
       exit
-      
+
 image:
   file: ./Dockerfile
 
@@ -20,10 +20,15 @@ ports:
   - port: 9002
     onOpen: ignore
     visibility: private
-  
+
 
 
 github:
   prebuilds:
     master: true
     branches: true
+vscode:
+  extensions:
+    - ms-toolsai.jupyter
+    - vscode.ipynb
+    - ms-python.python
