@@ -1,10 +1,10 @@
 
-tasks:
-  - name: start virtual x-server
-    command: |
-      sh virtualfb.sh
-      echo export DISPLAY=$(cat virtualfb.DISPLAY) >> ~/.bashrc
-      exit
+# tasks:
+#   - name: start virtual x-server
+#     command: |
+#       sh virtualfb.sh
+#       echo export DISPLAY=$(cat virtualfb.DISPLAY) >> ~/.bashrc
+#       exit
 
 image:
   file: ./Dockerfile
