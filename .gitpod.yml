@@ -4,7 +4,8 @@ tasks:
     command: |
       sh virtualfb.sh
       echo export DISPLAY=$(cat virtualfb.DISPLAY) >> ~/.bashrc
-
+      exit
+      
 image:
   file: ./Dockerfile
 
