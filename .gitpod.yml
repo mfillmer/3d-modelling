@@ -21,14 +21,7 @@ ports:
     onOpen: ignore
     visibility: private
 
-
-
 github:
   prebuilds:
     master: true
     branches: true
-vscode:
-  extensions:
-    - ms-toolsai.jupyter
-    - vscode.ipynb
-    - ms-python.python
