@@ -22,12 +22,14 @@ Einsatzschneide = forward(70)(
 
 Aufsatzschneide = forward(70)(
     rotate((0, 0, 270))(
-        sum([forward(x)(blade(70, length=4)) for x in range(0, 140, 8)]
+        sum([forward(x)(blade(70, length=4)) for x in range(6, 142, 8)]
             + [
             cube((2, 144, 2)),
             right(68)(cube((2, 144, 2))),
             cube((70, 2, 2)),
-            forward(142)(cube((70, 2, 2)))
+            forward(142)(cube((70, 2, 2))),
+            # blade(70, 4),
+            # forward(140)(blade(70, 4))
         ])
     )
 )
