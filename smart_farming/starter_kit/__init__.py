@@ -6,7 +6,7 @@ from solid.utils import forward, left, right
 from starter_kit.blade import blade
 from starter_kit.box import box
 from starter_kit.grid import grid
-from starter_kit.logo import arc, tube
+from starter_kit.logo import arc, logo, tube
 
 Einsatzschneide = forward(70)(
     rotate((0, 0, 270))(
@@ -43,16 +43,4 @@ Untersatz = box(144, 74, 60, 4) \
 Einlegeboden = grid()
 
 
-Logo = translate((20, 3, 0))(rotate((0, 0, -35))(arc(angle=125))
-                             + translate((0, 19, 0)
-                                         )(rotate((0, 0, 85))(arc(angle=130)))
-                             + translate((-9, 10, 0)
-                                         )(rotate((0, 0, 180))(arc(angle=185)))
-                             + translate((-7, 10, 0))(tube(13))
-                             + translate((0, 10, 0)
-                                         )(rotate((0, 0, 240))(arc(angle=60)))
-                             + translate((3, 10, 0)
-                                         )(rotate((0, 0, 240))(arc(angle=60)))
-                             + translate((6, 10, 0)
-                                         )(rotate((0, 0, 240))(arc(angle=60)))
-                             )
+Logo = logo()
