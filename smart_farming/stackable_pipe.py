@@ -1,10 +1,10 @@
 from solid import cylinder, translate
-from solid.objects import cube, rotate
+from solid.objects import cube, hull, rotate
 
 
 def ring(r1=10, r2=None, h=2, w=2, dx=0, dy=0, dz=0):
     r2 = r2 or r1
-    s = 30
+    s = 60
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
     inner = cylinder(r1=r1-w, r2=r2-w, h=h, segments=s)
     return translate((dx, dy, dz))(outer-inner)
@@ -26,8 +26,9 @@ def pipe(r=12, w=2, h=44):
         + ring(r1=r-w*2, h=w*2, w=w)\
         + ring(r1=r-w, r2=r-w*2, h=w, w=w, dz=w)\
         + ring(r1=r-w*2, h=w, w=w, dz=w*2) \
-        + ring(r1=r-w*2, r2=r, h=w*3, w=w, dz=w*3)\
-        + ring(r1=r, dz=w*6, h=w)
+        + ring(r1=r-w*2, r2=r+w, h=w*4, w=w, dz=w*3)\
+        + ring(r1=r, dz=w*6, h=w)\
+        - ring(r1=r+w, h=w*3, w=w, dz=w*5)
 
     middle = ring(r1=r, dz=w*7, h=h-w*11)
 
@@ -36,10 +37,11 @@ def pipe(r=12, w=2, h=44):
 
     stopper = sum([rotate((0, 0, a))(translate((r-w*3, -w, 0))
                   (cube((w*2, w, w*5)))) for a in [0, 120, 240]])
+    stopper -= ring(r1=r - w*3, r2=r-w, h=w*2, dz=w*3, w=w*5)
 
-    hook = slot(r1=r-w, r2=r, h=w, dz=h-w*2)\
-        + slot(r1=r, h=w, w=w*1.5, dz=h-w*3)\
-        + slot(r1=r, r2=r-w, h=w, dz=h-w*4)\
+    hook = hull()(slot(r1=r-w, r2=r, h=w, dz=h-w*2)
+                  + slot(r1=r, h=w, w=w*1.5, dz=h-w*3)
+                  + slot(r1=r, r2=r-w, h=w, dz=h-w*4))\
         + ring(r1=r, h=w*3, dz=h-w*4)\
         + (ring(r1=r, h=w, dz=h-w) * ring(r1=r, r2=r+w, h=w, dz=h-w))\
 
