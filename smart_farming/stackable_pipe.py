@@ -10,9 +10,12 @@ def ring(r1=10, r2=None, h=2, w=2, dx=0, dy=0, dz=0):
     return translate((dx, dy, dz))(outer-inner)
 
 
-def slot(*args, angle=30, **kwargs):
-    half = ring(*args, **kwargs) - translate((-50, -100, 0))(cube(100))
-
+def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
+    r2 = r2 or r1
+    size = max(r1, r2, w, h, 100)
+    size *= 2
+    half = ring(*args, r1=r1, r2=r2, w=w, h=h, **kwargs)
+    half -= translate((-size/2, -size, 0))(cube(size))
     if angle == 180:
         return half
     elif angle < 180:
