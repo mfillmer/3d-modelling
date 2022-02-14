@@ -24,7 +24,22 @@ def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
         return half + rotate((0, 0, angle))(half)
 
 
-def pipe(r=12, w=2, h=44):
+def socket(r=12, w=2, d=None):
+    if d is not None:
+        r = d/2
+    h = w*4
+    hook = hull()(slot(r1=r-w, r2=r, h=w, dz=h-w*2)
+                  + slot(r1=r, h=w, w=w*1.5, dz=h-w*3)
+                  + slot(r1=r, r2=r-w, h=w, dz=h-w*4))\
+        + ring(r1=r, h=w*3, dz=h-w*4)\
+
+    top = sum([rotate((0, 0, r))(hook) for r in [0, 120, 240]])
+    return top
+
+
+def pipe(r=12, w=2, h=44, d=None):
+    if d is not None:
+        r = d/2
     bottom = ring(r1=r-w, h=w, w=w)\
         + ring(r1=r-w*2, h=w*2, w=w)\
         + ring(r1=r-w, r2=r-w*2, h=w, w=w, dz=w)\
