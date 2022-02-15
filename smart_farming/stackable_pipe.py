@@ -2,7 +2,11 @@ from solid import cylinder, translate
 from solid.objects import cube, hull, rotate
 
 
-def ring(r1=10, r2=None, h=2, w=2, dx=0, dy=0, dz=0):
+def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
+    if d1 is not None:
+        r1 = d1/2
+    if d2 is not None:
+        r2 = d2/2
     r2 = r2 or r1
     s = 60
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
