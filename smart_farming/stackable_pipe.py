@@ -31,13 +31,20 @@ def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
 def socket(r=12, w=2, d=None):
     if d is not None:
         r = d/2
-    h = w*4
-    hook = hull()(slot(r1=r-w, r2=r, h=w, dz=h-w*2)
-                  + slot(r1=r, h=w, w=w*1.5, dz=h-w*3)
-                  + slot(r1=r, r2=r-w, h=w, dz=h-w*4))\
-        + ring(r1=r, h=w*3, dz=h-w*4)\
+
+    hook = hull()(
+        slot(r1=r-w, r2=r, h=w, dz=w*2),  # top
+        slot(r1=r, h=w, w=w*2, dz=w),  # middle
+        slot(r1=r, r2=r-w, h=w)  # bottom
+    )
 
     top = sum([rotate((0, 0, r))(hook) for r in [0, 120, 240]])
+
+    top += ring(r1=r, h=w*3)
+    top -= ring(r1=r-w*2+0.5, h=w*3)  # middle
+    top -= ring(r1=r-w, r2=r-w*2+0.5, h=w, w=w)  # bottom
+    top -= ring(r1=r-w*2+0.5, r2=r-w, h=w, w=w, dz=w*2)  # top
+
     return top
 
 
