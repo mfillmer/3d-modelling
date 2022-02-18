@@ -28,7 +28,10 @@ def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
         return half + rotate((0, 0, angle))(half)
 
 
-def socket(r=12, w=2, d=None):
+def socket(r=12, w=2, d=None, gap=0):
+    '''
+    @gap: describes the gap between socket and adapter. Should be between 0 and 1
+    '''
     if d is not None:
         r = d/2
 
@@ -41,9 +44,9 @@ def socket(r=12, w=2, d=None):
     top = sum([rotate((0, 0, r))(hook) for r in [0, 120, 240]])
 
     top += ring(r1=r, h=w*3)
-    top -= ring(r1=r-w*2, h=w*3)  # middle
-    top -= ring(r1=r-w, r2=r-w*2, h=w, w=w)  # bottom
-    top -= ring(r1=r-w*2, r2=r-w, h=w, w=w, dz=w*2)  # top
+    top -= ring(r1=r-w*2+gap, r2=r-w, h=w, w=w, dz=w*2)  # top
+    top -= ring(r1=r-w*2+gap, h=w*3)  # middle
+    top -= ring(r1=r-w, r2=r-w*2+gap, h=w, w=w)  # bottom
 
     return top
 
