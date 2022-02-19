@@ -28,7 +28,7 @@ def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
         return half + rotate((0, 0, angle))(half)
 
 
-def socket(r=12, w=2, d=None, gap=0):
+def socket(r=12, w=2, d=None, gap=0, slots=3):
     '''
     @gap: describes the gap between socket and adapter. Should be between 0 and 1
     '''
@@ -41,7 +41,7 @@ def socket(r=12, w=2, d=None, gap=0):
         slot(r1=r, r2=r-w, h=w)  # bottom
     )
 
-    top = sum([rotate((0, 0, r))(hook) for r in [0, 120, 240]])
+    top = sum([rotate((0, 0, r))(hook) for r in range(0, 360, 360//slots)])
 
     top += ring(r1=r, h=w*3)
     top -= ring(r1=r-w*2+gap, r2=r-w, h=w, w=w, dz=w*2)  # top
@@ -51,10 +51,11 @@ def socket(r=12, w=2, d=None, gap=0):
     return top
 
 
-def adapter(r=12, w=2, d=None):
+def adapter(r=12, w=2, d=None, slots=3):
     """
     adapter which mounts into socket. diamoter/radius needs to be the same as the ones specified for the socket. Height will result in 7w.
     """
+    angles = range(0, 360, 360//slots)
     if d is not None:
         r = d/2
     bottom = ring(r1=r-w, h=w, w=w)\
@@ -65,9 +66,9 @@ def adapter(r=12, w=2, d=None):
         + ring(r1=r, dz=w*6, h=w)\
         - ring(r1=r+w, h=w*3, w=w, dz=w*5)
     slots = sum([rotate((0, 0, a))(slot(r1=r-w + 0.5, w=w+0.5, h=w*2, angle=40))
-                for a in [0, 120, 240]])
+                for a in angles])
     stopper = sum([rotate((0, 0, a))(translate((r-w*3, -w, 0))
-                  (cube((w*2, w, w*5)))) for a in [0, 120, 240]])
+                  (cube((w*2, w, w*5)))) for a in angles])
     stopper_ring = stopper - ring(r1=r - w*3, r2=r-w, h=w*2, dz=w*3, w=w*5)
 
     return bottom - slots + stopper_ring
