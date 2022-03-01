@@ -5,8 +5,12 @@ ports:
   - port: 9000-9050
     onOpen: ignore
     visibility: private
-  
+
 github:
   prebuilds:
     master: true
     branches: true
+
+vscode:
+  extensions:
+    - Antyos.openscad
