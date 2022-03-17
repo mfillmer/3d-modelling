@@ -8,7 +8,7 @@ def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
     if d2 is not None:
         r2 = d2/2
     r2 = r2 or r1
-    s = 60
+    s = 100
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
     inner = cylinder(r1=r1-w, r2=r2-w, h=h, segments=s)
     return translate((dx, dy, dz))(outer-inner)
@@ -51,22 +51,31 @@ def socket(r=12, w=2, d=None, gap=0, slots=3):
     return top
 
 
-def adapter(r=12, w=2, d=None, slots=3):
+def adapter(r=12, w=2, d=None, slots=3, gap=0.2):
     """
     adapter which mounts into socket. diamoter/radius needs to be the same as the ones specified for the socket. Height will result in 7w.
     """
     angles = range(0, 360, 360//slots)
     if d is not None:
         r = d/2
-    bottom = ring(r1=r-w, h=w, w=w)\
-        + ring(r1=r-w*2, h=w*2, w=w)\
-        + ring(r1=r-w, r2=r-w*2, h=w, w=w, dz=w)\
-        + ring(r1=r-w*2, h=w, w=w, dz=w*2) \
-        + ring(r1=r-w*2, r2=r+w, h=w*4, w=w, dz=w*3)\
-        + ring(r1=r, dz=w*6, h=w)\
-        - ring(r1=r+w, h=w*3, w=w, dz=w*5)
-    slots = sum([rotate((0, 0, a))(slot(r1=r-w + 0.5, w=w+0.5, h=w*2, angle=40))
-                for a in angles])
+
+    # outer and inner bottomring
+    # add gap for smoother insert into socket
+    bottom = ring(r1=r-w-gap, r2=r-w, h=w, w=w)\
+        + ring(r1=r-w*2, h=w*3, w=w)
+
+    # pipe transition
+    bottom += ring(r1=r, dz=w*6, h=w)
+
+    # diameter transitions
+    bottom += ring(r1=r-w*2, r2=r+w, h=w*4, w=w, dz=w*3)\
+        + ring(r1=r-w, r2=r-w*2, h=w, w=w, dz=w)
+
+    # cut off overhang
+    bottom -= ring(r1=r+w, h=w*3, w=w, dz=w*5)
+
+    slot_cut = slot(r2=r-w + 0.5, r1=r-w + 0.5 - gap, w=w+0.5, h=w*2, angle=40)
+    slots = sum([rotate((0, 0, a))(slot_cut) for a in angles])
     stopper = sum([rotate((0, 0, a))(translate((r-w*3, -w, 0))
                   (cube((w*2, w, w*5)))) for a in angles])
     stopper_ring = stopper - ring(r1=r - w*3, r2=r-w, h=w*2, dz=w*3, w=w*5)
