@@ -2,7 +2,7 @@ from solid.objects import cylinder, cube, rotate, translate
 
 
 def tube(r=10, h=1, wall=1):
-    return cylinder(r=r, h=h, segments=30) - cylinder(r=r-wall, h=h, segments=30)
+    return cylinder(r=r, h=h, segments=100) - cylinder(r=r-wall, h=h, segments=100)
 
 
 def arc(angle=30, r=10, h=1, w=1, segment=5):
