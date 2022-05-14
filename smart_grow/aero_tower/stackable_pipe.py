@@ -1,4 +1,4 @@
-from solid import cylinder, translate
+from solid import cylinder, translate, square, rotate_extrude
 from solid.objects import cube, hull, rotate
 
 
@@ -28,6 +28,15 @@ def slot(*args, angle=30, r1=10, r2=None, w=2, h=2, **kwargs):
         return half + rotate((0, 0, angle))(half)
 
 
+def hook(r=80, w=2, d=4, angle=30):
+
+    plain = square((w, 3*d)) + translate((-2*d, d, 0))(square(d))
+    translated_plain = hull()(translate((r-w, 0, 0))(plain))
+    model = rotate_extrude(angle=angle, segments=100)(translated_plain)
+
+    return model
+
+
 def socket(r=12, w=2, d=None, gap=0, slots=3):
     '''
     @gap: describes the gap between socket and adapter. Should be between 0 and 1. Height will result in 3w.
@@ -35,15 +44,16 @@ def socket(r=12, w=2, d=None, gap=0, slots=3):
     if d is not None:
         r = d/2
 
-    hook = hull()(
-        slot(r1=r-w, r2=r, h=w, dz=w*2),  # top
-        slot(r1=r, h=w, w=w*2, dz=w),  # middle
-        slot(r1=r, r2=r-w, h=w)  # bottom
-    )
+    _hook = hook(r=r, w=w/2, d=w, angle=30)
+    # hull()(
+    #     slot(r1=r-w, r2=r, h=w, dz=w*2),  # top
+    #     slot(r1=r, h=w, w=w*2, dz=w),  # middle
+    #     slot(r1=r, r2=r-w, h=w)  # bottom
+    # )
 
-    top = sum([rotate((0, 0, r))(hook) for r in range(0, 360, 360//slots)])
+    top = sum([rotate((0, 0, r))(_hook) for r in range(0, 360, 360//slots)])
 
-    top += ring(r1=r, h=w*3)
+    top += ring(r1=r, h=w*3, w=w/2)
     top -= ring(r1=r-w*2+gap, r2=r-w, h=w, w=w, dz=w*2)  # top
     top -= ring(r1=r-w*2+gap, h=w*3, w=w)  # middle
     top -= ring(r1=r-w, r2=r-w*2+gap, h=w, w=w)  # bottom
