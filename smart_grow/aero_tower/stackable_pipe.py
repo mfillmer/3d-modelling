@@ -128,11 +128,11 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
     return body + screw
 
 
-def connection(d=80, h=30, wall=2, strength=2, gap=0.2):
+def connection(d=80, h=30, wall=2, strength=2, gap=0.2, tooth_height=10, tooth_depth=5):
     radius = d/2
     adapter = hollow_screw(radius=radius-wall-gap,
-                           wall=wall, screw_height=h, external=True)
+                           wall=wall, screw_height=h, external=True, tooth_depth=tooth_depth, tooth_height=tooth_height)
     socket = hollow_screw(radius=radius, wall=wall,
-                          screw_height=h, external=False)
+                          screw_height=h, external=False, tooth_depth=tooth_depth, tooth_height=tooth_height)
 
     return (adapter, socket)
