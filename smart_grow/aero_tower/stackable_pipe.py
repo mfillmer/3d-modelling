@@ -104,3 +104,34 @@ def pipe(r=12, w=2, h=44, d=None):
 
     pipe = bottom + middle + top
     return pipe
+
+
+def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height=10, tooth_depth=5):
+    body_radius = radius-tooth_depth if external else radius
+    body = ring(r1=body_radius, h=screw_height, w=wall)
+
+    inner_rad = body_radius if external else body_radius-wall
+
+    SEGMENTS = 48
+    section = screw_thread.default_thread_section(
+        tooth_height=tooth_height, tooth_depth=tooth_depth)
+    screw = screw_thread.thread(outline_pts=section,
+                                inner_rad=inner_rad,
+                                pitch=tooth_height+.5,
+                                external=external,
+                                length=screw_height,
+                                segments_per_rot=SEGMENTS,
+                                neck_in_degrees=90,
+                                neck_out_degrees=90)
+
+    return body + screw
+
+
+def connection(d=80, h=30, wall=2, strength=2, gap=0.2):
+    radius = d/2
+    adapter = hollow_screw(radius=radius-wall-gap,
+                           wall=wall, screw_height=h, external=True)
+    socket = hollow_screw(radius=radius, wall=wall,
+                          screw_height=h, external=False)
+
+    return (adapter, socket)
