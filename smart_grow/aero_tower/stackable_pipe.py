@@ -1,5 +1,6 @@
 from solid import cylinder, translate, square, rotate_extrude
 from solid.objects import cube, hull, rotate
+from solid import screw_thread
 
 
 def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
