@@ -1,8 +1,8 @@
-FROM gitpod/workspace-full
+FROM debian:buster
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-    && sudo apt-get update -y \
-    && sudo apt -y install --no-install-recommends openscad
+    && apt-get update -y \
+    && apt -y install --no-install-recommends openscad
 
 COPY ./requirements.txt /tmp/pip-tmp/requirements.txt
 
