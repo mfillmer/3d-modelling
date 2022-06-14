@@ -111,11 +111,13 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
     body_radius = radius-tooth_depth if external else radius
     body = ring(r1=body_radius, h=screw_height, w=wall)
 
-    SEGMENTS = 48
+    inner_rad = body_radius if external else body_radius-wall
+
+    SEGMENTS = 100
     section = screw_thread.default_thread_section(
         tooth_height=tooth_height, tooth_depth=tooth_depth)
     screw = screw_thread.thread(outline_pts=section,
-                                inner_rad=body_radius,
+                                inner_rad=inner_rad,
                                 pitch=tooth_height+.5,
                                 external=external,
                                 length=screw_height,
