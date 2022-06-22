@@ -136,3 +136,16 @@ def connection(d=80, h=30, wall=2, strength=2, gap=0.2, tooth_height=10, tooth_d
                           screw_height=h, external=False, tooth_depth=tooth_depth, tooth_height=tooth_height)
 
     return (adapter, socket)
+
+
+def two_sided_connection(outer_d=180, outer_w=2, outer_tooth=4, inner_d=160, inner_w=2, inner_tooth=2, height=20, gap=0.2):
+    (adapter, _) = connection(d=outer_d, h=height,
+                              tooth_depth=outer_tooth, wall=outer_w, tooth_height=outer_tooth*2)
+    (_, socket) = connection(d=inner_d, h=height,
+                             tooth_depth=inner_tooth, wall=inner_w, tooth_height=inner_tooth*2)
+
+    con_d = outer_d-(outer_tooth+outer_w+gap)*2
+    con_w = (con_d-inner_d) / 2
+    con = ring(d1=con_d, w=con_w, h=height)
+
+    return adapter + socket + con
