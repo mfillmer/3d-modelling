@@ -1,7 +1,34 @@
-from solid import cylinder, translate, square, rotate_extrude
+from solid import *
+from math import sqrt
 from solid.objects import cube, hull, rotate
-from solid.utils import up
+from solid.utils import up, down
 from solid import screw_thread
+
+
+def mount_to_bottom(obj):
+    return hull()(
+        obj,
+        linear_extrude(height=1)(projection()(obj))
+    )
+
+
+def cutout(size):
+    c = cube(size)\
+        - translate((size/2, 0, 0))(cylinder(r=size/2, h=size, segments=100))\
+        - translate((size/2, size, 0))(cylinder(r=size/2, h=size, segments=100))\
+        - translate((size/2, 0, 0))(cube(size))
+
+    c = translate((size/2, -size/2, 0))(rotate((0, -90, 0))(c))
+    c = rotate(90)(c)
+    c = translate((0, size/2, 0))(c)
+
+    return c
+
+
+def tended_obj(w):
+    return lambda obj: up(sqrt(((w/2)**2)/2))(
+        rotate((45, 0, 0))(obj)
+    )
 
 
 def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
