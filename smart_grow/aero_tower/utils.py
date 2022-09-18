@@ -37,7 +37,7 @@ def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
     if d2 is not None:
         r2 = d2/2
     r2 = r2 or r1
-    s = 100
+    s = 30
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
     inner = cylinder(r1=r1-w, r2=r2-w, h=h, segments=s)
     return translate((dx, dy, dz))(outer-inner)
@@ -49,7 +49,7 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
 
     inner_rad = body_radius if external else body_radius-wall
 
-    SEGMENTS = 100
+    SEGMENTS = 30
     NECK = 30
     section = screw_thread.default_thread_section(
         tooth_height=tooth_height, tooth_depth=tooth_depth)
@@ -101,3 +101,26 @@ def pipe(d=160, w=2, tooth=2, socket_h=10, h=50):
     pipe += up(h-socket_h)(socket)
 
     return pipe
+
+
+def sliding_connector(length=60, width=20, gap=0.2):
+    slider = cylinder(
+        d=width, h=length, segments=3, center=True
+    )
+    socket = rotate((0, 90, 0))(
+        slider +
+        translate((0, 0, length/4))(
+            cube((width/5*4, width/5*4, length/2), center=True)
+        )
+    )
+    slider = cylinder(
+        d=width-gap, h=length, segments=3, center=True
+    )
+    adapter = rotate((0, 90, 0))(
+        slider *
+        translate((0, 0, length/4))(
+            cube((width/5*4, width/5*4, length/2), center=True)
+        )
+    )*translate((0, -length/2, 0))(cube((length)))
+
+    return socket, adapter
