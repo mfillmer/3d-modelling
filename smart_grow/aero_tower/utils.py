@@ -37,7 +37,7 @@ def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
     if d2 is not None:
         r2 = d2/2
     r2 = r2 or r1
-    s = 30
+    s = 100
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
     inner = cylinder(r1=r1-w, r2=r2-w, h=h, segments=s)
     return translate((dx, dy, dz))(outer-inner)
@@ -49,7 +49,7 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
 
     inner_rad = body_radius if external else body_radius-wall
 
-    SEGMENTS = 30
+    SEGMENTS = 360
     NECK = 30
     section = screw_thread.default_thread_section(
         tooth_height=tooth_height, tooth_depth=tooth_depth)
@@ -96,7 +96,7 @@ def pipe(d=160, w=2, tooth=2, socket_h=10, h=50):
                                    wall=w, tooth_depth=tooth, tooth_height=2*tooth, gap=gap)
     pipe = translate((0, 0, socket_h+delta_r))(body)
     pipe += adapter + translate((0, 0, socket_h)
-                                )(ring(r2=d/2, r1=d/2-delta_r, h=delta_r))
+                                )(ring(r2=d/2, r1=d/2-delta_r, h=delta_r, w=w))
 
     pipe += up(h-socket_h)(socket)
 
