@@ -37,7 +37,7 @@ def ring(r1=10, r2=None, d1=None, d2=None, h=2, w=2, dx=0, dy=0, dz=0):
     if d2 is not None:
         r2 = d2/2
     r2 = r2 or r1
-    s = 100
+    s = 360
     outer = cylinder(r1=r1, r2=r2, h=h, segments=s)
     inner = cylinder(r1=r1-w, r2=r2-w, h=h, segments=s)
     return translate((dx, dy, dz))(outer-inner)
@@ -65,12 +65,17 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
     return body + screw
 
 
-def connection(d=80, h=30, wall=2, strength=2, gap=0.2, tooth_height=10, tooth_depth=5):
+def connection(d=80, h=30, wall=2, gap=0.2, tooth_height=10, tooth_depth=5, w1=None, w2=None):
     radius = d/2
-    adapter = hollow_screw(radius=radius-wall-gap,
-                           wall=wall, screw_height=h, external=True, tooth_depth=tooth_depth, tooth_height=tooth_height)
+
+    if w1 is not None:
+        wall = w1
     socket = hollow_screw(radius=radius, wall=wall,
                           screw_height=h, external=False, tooth_depth=tooth_depth, tooth_height=tooth_height)
+    if w2 is not None:
+        wall = w2
+    adapter = hollow_screw(radius=radius-wall-gap,
+                           wall=wall, screw_height=h, external=True, tooth_depth=tooth_depth, tooth_height=tooth_height)
 
     return (adapter, socket)
 
