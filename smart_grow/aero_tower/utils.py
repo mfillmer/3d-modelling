@@ -50,7 +50,7 @@ def hollow_screw(radius=40, screw_height=80, wall=2, external=True, tooth_height
     inner_rad = body_radius if external else body_radius-wall
 
     SEGMENTS = 360
-    NECK = 30
+    NECK = 360
     section = screw_thread.default_thread_section(
         tooth_height=tooth_height, tooth_depth=tooth_depth)
     screw = screw_thread.thread(outline_pts=section,
